@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import SwiftUI
 
 final class SettingsStore: ObservableObject {
     static let shared = SettingsStore()
@@ -7,6 +8,8 @@ final class SettingsStore: ObservableObject {
     @Published var llmConfig: LLMConfig = .default {
         didSet { save() }
     }
+
+    @AppStorage("darkModeEnabled") var darkModeEnabled: Bool = false
 
     private let defaults = UserDefaults.standard
     private let configKey = "llmConfig"

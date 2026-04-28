@@ -592,8 +592,6 @@ struct PalaceCell: View {
             .background(Color(hex: "#2196F3").opacity(0.9))
             .cornerRadius(2)
     }
-            .cornerRadius(2)
-    }
 
     private func transformationColor(_ trans: String) -> Color {
         switch trans {
@@ -630,11 +628,12 @@ struct ChartDisplayView: View {
     @State private var showFlyingStars: Bool = false
 
     // Horoscope selection states (shared across main chart and selectors)
-    @State private var selectedDecadal: Int = 0
-    @State private var selectedYear: Int = 0
-    @State private var selectedMonth: Int = 0
-    @State private var selectedDay: Int = 0
-    @State private var selectedHour: Int = 0
+    // Use -1 to indicate "nothing selected"
+    @State private var selectedDecadal: Int = -1
+    @State private var selectedYear: Int = -1
+    @State private var selectedMonth: Int = -1
+    @State private var selectedDay: Int = -1
+    @State private var selectedHour: Int = -1
 
     enum ChartTab: String, CaseIterable {
         case main = "本命"

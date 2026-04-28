@@ -120,7 +120,7 @@ struct HoroscopeSelectorView: View {
                             .onTapGesture {
                                 withAnimation(.spring(response: 0.2, dampingFraction: 0.8)) {
                                     if selection.wrappedValue == option.index {
-                                        selection.wrappedValue = 0
+                                        selection.wrappedValue = -1
                                     } else {
                                         selection.wrappedValue = option.index
                                     }

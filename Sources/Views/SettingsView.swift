@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var localization = LocalizationManager.shared
+    @StateObject private var settings = SettingsStore.shared
 
     var body: some View {
         VStack(spacing: 0) {
@@ -30,12 +31,16 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.radioGroup)
                 }
+
+                Section(L("appearance")) {
+                    Toggle(L("dark_mode"), isOn: $settings.darkModeEnabled)
+                }
             }
             .formStyle(.grouped)
             .padding()
 
             Spacer()
         }
-        .frame(width: 400, height: 300)
+        .frame(width: 400, height: 350)
     }
 }

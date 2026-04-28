@@ -381,5 +381,7 @@
   "pattern_matou_daijian": "馬頭帶箭",
   "pattern_lucun_shouming": "祿存守命",
   "select_client_to_chart": "選擇客戶後自動排盤",
-  "yearly_age": "流年"
+  "yearly_age": "流年",
+  "appearance": "外觀",
+  "dark_mode": "深色模式"
 }
