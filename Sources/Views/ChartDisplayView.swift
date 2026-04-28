@@ -119,10 +119,9 @@ struct PalaceCellCenter: View {
     let client: Client
 
     private func hourDisplay(_ hour: Int) -> String {
-        guard hour >= 0, hour < 13 else { return "\(hour)\(L("label_hour"))" }
-        if hour == 0 { return L("hour_early_zi") }
-        if hour == 12 { return L("hour_late_zi") }
-        let branch = EarthlyBranch(rawValue: hour - 1) ?? .zi
+        guard let branch = EarthlyBranch(rawValue: hour) else {
+            return "\(hour)\(L("label_hour"))"
+        }
         return branch.displayName
     }
 

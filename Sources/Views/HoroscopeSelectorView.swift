@@ -47,12 +47,8 @@ struct HoroscopeSelectorView: View {
 
     // 流時選項
     private var hourlyOptions: [(index: Int, label: String)] {
-        (0...12).map { hour in
-            let label: String
-            if hour == 0 { label = L("hour_early_zi") }
-            else if hour == 12 { label = L("hour_late_zi") }
-            else if let branch = EarthlyBranch(rawValue: hour - 1) { label = branch.displayName }
-            else { label = "\(hour)" }
+        (0...11).map { hour in
+            let label = EarthlyBranch(rawValue: hour)?.displayName ?? "\(hour)"
             return (hour, label)
         }
     }
