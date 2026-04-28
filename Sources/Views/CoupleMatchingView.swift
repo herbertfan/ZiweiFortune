@@ -134,8 +134,8 @@ struct CoupleMatchingView: View {
 
         // 夫妻宫交叉
         prompt += "\n【夫妻宫交叉】\n"
-        let aSpouse = chartA.palaces.first { $0.name == "夫妻宮" }
-        let bSpouse = chartB.palaces.first { $0.name == "夫妻宮" }
+        let aSpouse = chartA.palaces.first { $0.name == "夫妻宫" }
+        let bSpouse = chartB.palaces.first { $0.name == "夫妻宫" }
         if let asp = aSpouse, let bsp = bSpouse {
             prompt += "甲方夫妻宫：\(asp.majorStars.map { $0.name }.joined(separator: "、"))\n"
             prompt += "乙方夫妻宫：\(bsp.majorStars.map { $0.name }.joined(separator: "、"))\n"
@@ -156,7 +156,7 @@ struct CoupleMatchingView: View {
         s += "性别：\(client.gender.rawValue)\n"
         s += "五行局：\(chart.wuXingJu.rawValue)\n"
         s += "命宫：\(chart.mingGong.name) - \(chart.mingGong.majorStars.map { $0.name }.joined(separator: "、"))\n"
-        s += "夫妻宫：\(chart.palaces.first { $0.name == "夫妻宮" }?.majorStars.map { $0.name }.joined(separator: "、") ?? "")\n"
+        s += "夫妻宫：\(chart.palaces.first { $0.name == "夫妻宫" }?.majorStars.map { $0.name }.joined(separator: "、") ?? "")\n"
         s += "四化：\(chart.mingGong.mutagens.map { "\($0.star)\($0.transformation)" }.joined(separator: " "))\n"
         return s
     }
@@ -174,8 +174,8 @@ struct CoupleMatchingView: View {
 
     private func flyMeaning(transformation: String) -> String {
         switch transformation {
-        case "祿": return "生助、缘分"
-        case "權": return "掌控、主导"
+        case "禄": return "生助、缘分"
+        case "权": return "掌控、主导"
         case "科": return "文昌、和睦"
         case "忌": return "刑克、纠缠"
         default: return ""
@@ -322,8 +322,8 @@ struct CoupleAnalysisView: View {
                         }
 
                         ComparisonSection(title: L("spouse_comparison")) {
-                            let aSpouse = chartA.palaces.first { $0.name == "夫妻宮" }
-                            let bSpouse = chartB.palaces.first { $0.name == "夫妻宮" }
+                            let aSpouse = chartA.palaces.first { $0.name == "夫妻宫" }
+                            let bSpouse = chartB.palaces.first { $0.name == "夫妻宫" }
                             ComparisonRow(label: L("person_a"), value: "\(aSpouse?.displayName ?? ""): \(aSpouse?.majorStars.map { $0.displayName }.joined(separator: "、") ?? "")")
                             ComparisonRow(label: L("person_b"), value: "\(bSpouse?.displayName ?? ""): \(bSpouse?.majorStars.map { $0.displayName }.joined(separator: "、") ?? "")")
                         }

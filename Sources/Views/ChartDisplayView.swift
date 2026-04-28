@@ -234,18 +234,18 @@ struct PalaceCell: View {
     private var palaceColor: Color {
         if isMingGong { return Color(hex: "#1A73E8") }
         switch palace.name {
-        case "命宮":   return Color(hex: "#1A73E8")
-        case "父母宮": return Color(hex: "#7986CB")
-        case "福德宮": return Color(hex: "#FFB74D")
-        case "田宅宮": return Color(hex: "#66BB6A")
-        case "官祿宮": return Color(hex: "#EF5350")
-        case "交友宮": return Color(hex: "#BA68C8")
-        case "遷移宮": return Color(hex: "#4DB6AC")
-        case "疾厄宮": return Color(hex: "#E57373")
-        case "財帛宮": return Color(hex: "#FF8F00")
-        case "子女宮": return Color(hex: "#4FC3F7")
-        case "夫妻宮": return Color(hex: "#F06292")
-        case "兄弟宮": return Color(hex: "#5C6BC0")
+        case "命宫":   return Color(hex: "#1A73E8")
+        case "父母宫": return Color(hex: "#7986CB")
+        case "福德宫": return Color(hex: "#FFB74D")
+        case "田宅宫": return Color(hex: "#66BB6A")
+        case "官禄宫": return Color(hex: "#EF5350")
+        case "交友宫": return Color(hex: "#BA68C8")
+        case "迁移宫": return Color(hex: "#4DB6AC")
+        case "疾厄宫": return Color(hex: "#E57373")
+        case "财帛宫": return Color(hex: "#FF8F00")
+        case "子女宫": return Color(hex: "#4FC3F7")
+        case "夫妻宫": return Color(hex: "#F06292")
+        case "兄弟宫": return Color(hex: "#5C6BC0")
         default: return .gray
         }
     }
@@ -484,8 +484,8 @@ struct PalaceCell: View {
 
     private func transformationColor(_ trans: String) -> Color {
         switch trans {
-        case "祿": return Color(hex: "#4CAF50")
-        case "權": return Color(hex: "#9C27B0")
+        case "禄": return Color(hex: "#4CAF50")
+        case "权": return Color(hex: "#9C27B0")
         case "科": return Color(hex: "#2196F3")
         case "忌": return Color(hex: "#F44336")
         default: return .gray
@@ -650,8 +650,8 @@ struct DecadalView: View {
 
     private func transColor(_ trans: String) -> Color {
         switch trans {
-        case "祿": return Color(hex: "#4CAF50")
-        case "權": return Color(hex: "#9C27B0")
+        case "禄": return Color(hex: "#4CAF50")
+        case "权": return Color(hex: "#9C27B0")
         case "科": return Color(hex: "#2196F3")
         case "忌": return Color(hex: "#F44336")
         default: return .gray
@@ -720,7 +720,7 @@ struct YearlyView: View {
                             HStack(spacing: 8) {
                                 ForEach(yearly.mutagen.indices, id: \.self) { i in
                                     let transKeys = ["mutagen_lu", "mutagen_quan", "mutagen_ke", "mutagen_ji"]
-                                    let transRaw = ["祿", "權", "科", "忌"][i]
+                                    let transRaw = ["禄", "权", "科", "忌"][i]
                                     let star = yearly.mutagen[i].displayName
                                     HStack(spacing: 2) {
                                         Text(L(transKeys[i]))
@@ -795,8 +795,8 @@ struct YearlyView: View {
 
     private func transColor(_ trans: String) -> Color {
         switch trans {
-        case "祿": return Color(hex: "#4CAF50")
-        case "權": return Color(hex: "#9C27B0")
+        case "禄": return Color(hex: "#4CAF50")
+        case "权": return Color(hex: "#9C27B0")
         case "科": return Color(hex: "#2196F3")
         case "忌": return Color(hex: "#F44336")
         default: return .gray

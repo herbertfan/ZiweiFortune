@@ -5,7 +5,7 @@ import Foundation
 struct FlyResult: Equatable, Hashable {
     let fromPalaceIndex: Int
     let fromPalaceName: String
-    let transformation: String  // 祿/權/科/忌
+    let transformation: String  // 禄/权/科/忌
     let starName: String        // 被化的星
     let toPalaceIndex: Int
     let toPalaceName: String
@@ -211,12 +211,12 @@ enum ZiweiAnalysis {
             }
 
             // Auspicious minor stars
-            let auspicious = ["左輔", "右弼", "天魁", "天鉞", "文昌", "文曲", "祿存", "天馬"]
+            let auspicious = ["左辅", "右弼", "天魁", "天钺", "文昌", "文曲", "禄存", "天马"]
             let auspiciousCount = palace.minorStars.filter { auspicious.contains($0.name) }.count
             score += Double(auspiciousCount) * 3
 
             // Malefic minor stars
-            let malefic = ["擎羊", "陀羅", "火星", "鈴星", "地空", "地劫"]
+            let malefic = ["擎羊", "陀罗", "火星", "铃星", "地空", "地劫"]
             let maleficCount = palace.minorStars.filter { malefic.contains($0.name) }.count
             score -= Double(maleficCount) * 4
 
@@ -224,8 +224,8 @@ enum ZiweiAnalysis {
             for star in palace.allStars {
                 if let t = star.transformation {
                     switch t {
-                    case "祿": score += 5; notes.append("化祿")
-                    case "權": score += 4; notes.append("化權")
+                    case "禄": score += 5; notes.append("化禄")
+                    case "权": score += 4; notes.append("化权")
                     case "科": score += 3; notes.append("化科")
                     case "忌": score -= 6; notes.append("化忌")
                     default: break
@@ -279,56 +279,56 @@ enum ZiweiAnalysis {
         }
 
         // 3. 日月并明
-        if mingStars.contains("太陽") && mingStars.contains("太陰") {
+        if mingStars.contains("太阳") && mingStars.contains("太阴") {
             patterns.append(Pattern(name: "日月并明", description: "太阳太阴同宫，主阴阳调和，光明磊落，事业有成。", level: .supreme))
         }
-        if mingSiZheng.contains("太陽") && mingSiZheng.contains("太陰") {
+        if mingSiZheng.contains("太阳") && mingSiZheng.contains("太阴") {
             patterns.append(Pattern(name: "日月照命", description: "太阳太阴在三方四正会照，主名声显达。", level: .high))
         }
 
         // 4. 七杀朝斗/仰斗
-        if mingStars.contains("七殺") {
+        if mingStars.contains("七杀") {
             if [0, 4, 8].contains(mingGong.index) { // 寅申巳亥
-                patterns.append(Pattern(name: "七殺朝斗", description: "七杀坐命于四生之地，主开创力强，宜武职创业。", level: .high))
+                patterns.append(Pattern(name: "七杀朝斗", description: "七杀坐命于四生之地，主开创力强，宜武职创业。", level: .high))
             } else if [2, 6, 10].contains(mingGong.index) { // 子午卯酉
-                patterns.append(Pattern(name: "七殺仰斗", description: "七杀坐命于四正之地，主威权显赫，但需防孤克。", level: .high))
+                patterns.append(Pattern(name: "七杀仰斗", description: "七杀坐命于四正之地，主威权显赫，但需防孤克。", level: .high))
             }
         }
 
         // 5. 机月同梁
-        let jiYueTongLiang = ["天機", "太陰", "天同", "天梁"]
+        let jiYueTongLiang = ["天机", "太阴", "天同", "天梁"]
         if jiYueTongLiang.allSatisfy({ mingAll.contains($0) || mingSiZheng.contains($0) }) {
-            patterns.append(Pattern(name: "機月同梁", description: "天机太阴天同天梁会照，主宜文职幕僚，善策划协调。", level: .medium))
+            patterns.append(Pattern(name: "机月同梁", description: "天机太阴天同天梁会照，主宜文职幕僚，善策划协调。", level: .medium))
         }
 
         // 6. 贪狼守命
-        if mingStars.contains("貪狼") {
-            patterns.append(Pattern(name: "貪狼守命", description: "贪狼坐命，主多才多艺，交际广阔，欲望强烈。", level: .medium))
+        if mingStars.contains("贪狼") {
+            patterns.append(Pattern(name: "贪狼守命", description: "贪狼坐命，主多才多艺，交际广阔，欲望强烈。", level: .medium))
         }
 
         // 7. 巨日同宫
-        if mingStars.contains("巨門") && mingStars.contains("太陽") {
-            patterns.append(Pattern(name: "巨日同宮", description: "巨门太阳同宫，主口才出众，宜文教传播，防是非。", level: .medium))
+        if mingStars.contains("巨门") && mingStars.contains("太阳") {
+            patterns.append(Pattern(name: "巨日同宫", description: "巨门太阳同宫，主口才出众，宜文教传播，防是非。", level: .medium))
         }
 
         // 8. 武贪同行
-        if mingStars.contains("武曲") && mingStars.contains("貪狼") {
-            patterns.append(Pattern(name: "武貪同行", description: "武曲贪狼同宫，主财权双美，宜经商创业，晚发。", level: .high))
+        if mingStars.contains("武曲") && mingStars.contains("贪狼") {
+            patterns.append(Pattern(name: "武贪同行", description: "武曲贪狼同宫，主财权双美，宜经商创业，晚发。", level: .high))
         }
 
         // 9. 廉贞七杀
-        if mingStars.contains("廉貞") && mingStars.contains("七殺") {
-            patterns.append(Pattern(name: "廉貞七殺", description: "廉贞七杀同宫，主积富之人，宜经商，但性格刚烈。", level: .medium))
+        if mingStars.contains("廉贞") && mingStars.contains("七杀") {
+            patterns.append(Pattern(name: "廉贞七杀", description: "廉贞七杀同宫，主积富之人，宜经商，但性格刚烈。", level: .medium))
         }
 
         // 10. 火贪/铃贪
-        if mingStars.contains("貪狼") && (mingAll.contains("火星") || mingAll.contains("鈴星")) {
-            patterns.append(Pattern(name: "火貪/鈴貪", description: "贪狼遇火铃，主突发之财，横发暴富，但起伏大。", level: .special))
+        if mingStars.contains("贪狼") && (mingAll.contains("火星") || mingAll.contains("铃星")) {
+            patterns.append(Pattern(name: "火贪/铃贪", description: "贪狼遇火铃，主突发之财，横发暴富，但起伏大。", level: .special))
         }
 
         // 11. 空宫借星
         if mingGong.majorStars.allSatisfy({ $0.type == "borrowed" }) {
-            patterns.append(Pattern(name: "空宮借星", description: "命宫无主星，借对宫星曜，命格受对宫影响较大。", level: .special))
+            patterns.append(Pattern(name: "空宫借星", description: "命宫无主星，借对宫星曜，命格受对宫影响较大。", level: .special))
         }
 
         // 12. 辅弼夹命
@@ -338,38 +338,38 @@ enum ZiweiAnalysis {
         let rightStarNames = palaces[rightIdx].allStars.map { $0.name }
         let leftAllStars = palaces[leftIdx].allStars
         let rightAllStars = palaces[rightIdx].allStars
-        if leftStarNames.contains("左輔") && rightStarNames.contains("右弼") {
-            patterns.append(Pattern(name: "輔弼夾命", description: "左辅右弼夹命宫，主左右逢源，得力助手多。", level: .high))
+        if leftStarNames.contains("左辅") && rightStarNames.contains("右弼") {
+            patterns.append(Pattern(name: "辅弼夹命", description: "左辅右弼夹命宫，主左右逢源，得力助手多。", level: .high))
         }
 
         // 13. 昌曲夹命
         if leftStarNames.contains("文昌") && rightStarNames.contains("文曲") {
-            patterns.append(Pattern(name: "昌曲夾命", description: "文昌文曲夹命宫，主聪明才智，学业功名佳。", level: .high))
+            patterns.append(Pattern(name: "昌曲夹命", description: "文昌文曲夹命宫，主聪明才智，学业功名佳。", level: .high))
         }
 
         // 14. 权禄夹命
-        if leftAllStars.contains(where: { $0.transformation == "祿" }) && rightAllStars.contains(where: { $0.transformation == "權" }) {
-            patterns.append(Pattern(name: "權祿夾命", description: "化禄化权夹命宫，主富贵双全，事业有成。", level: .supreme))
+        if leftAllStars.contains(where: { $0.transformation == "禄" }) && rightAllStars.contains(where: { $0.transformation == "权" }) {
+            patterns.append(Pattern(name: "权禄夹命", description: "化禄化权夹命宫，主富贵双全，事业有成。", level: .supreme))
         }
 
         // 15. 君臣庆会
         if mingStars.contains("紫微") && mingSiZheng.contains("天府") || (mingStars.contains("天府") && mingSiZheng.contains("紫微")) {
-            patterns.append(Pattern(name: "君臣慶會", description: "紫微天府在三方四正相会，主君臣和睦，事业昌隆。", level: .supreme))
+            patterns.append(Pattern(name: "君臣庆会", description: "紫微天府在三方四正相会，主君臣和睦，事业昌隆。", level: .supreme))
         }
 
         // 16. 日月反背
-        if mingStars.contains("太陽") && [5, 11].contains(mingGong.index) { // 太阳在巳亥为落陷
+        if mingStars.contains("太阳") && [5, 11].contains(mingGong.index) { // 太阳在巳亥为落陷
             patterns.append(Pattern(name: "日月反背", description: "太阳落陷坐命，主辛劳奔波，需靠后天努力。", level: .special))
         }
 
         // 17. 马头带箭
-        if mingStars.contains("天馬") && mingStars.contains("七殺") {
-            patterns.append(Pattern(name: "馬頭帶箭", description: "天马七杀同宫，主奔波开创，宜外地发展。", level: .medium))
+        if mingStars.contains("天马") && mingStars.contains("七杀") {
+            patterns.append(Pattern(name: "马头带箭", description: "天马七杀同宫，主奔波开创，宜外地发展。", level: .medium))
         }
 
         // 18. 禄存守命
-        if mingStars.contains("祿存") {
-            patterns.append(Pattern(name: "祿存守命", description: "禄存坐命，主财运亨通，一生不缺钱财。", level: .high))
+        if mingStars.contains("禄存") {
+            patterns.append(Pattern(name: "禄存守命", description: "禄存坐命，主财运亨通，一生不缺钱财。", level: .high))
         }
 
         return patterns
@@ -380,16 +380,16 @@ enum ZiweiAnalysis {
     /// 天干四化映射（中州派）
     private static func getMutagenMap(stem: HeavenlyStem) -> [(String, String)] {
         switch stem {
-        case .jia: return [("祿", "廉貞"), ("權", "破軍"), ("科", "武曲"), ("忌", "太陽")]
-        case .yi:  return [("祿", "天機"), ("權", "天梁"), ("科", "紫微"), ("忌", "太陰")]
-        case .bing: return [("祿", "天同"), ("權", "天機"), ("科", "文昌"), ("忌", "廉貞")]
-        case .ding: return [("祿", "太陰"), ("權", "天同"), ("科", "天機"), ("忌", "巨門")]
-        case .wu:   return [("祿", "貪狼"), ("權", "太陰"), ("科", "右弼"), ("忌", "天機")]
-        case .ji:   return [("祿", "武曲"), ("權", "貪狼"), ("科", "天梁"), ("忌", "文曲")]
-        case .geng: return [("祿", "太陽"), ("權", "武曲"), ("科", "太陰"), ("忌", "天同")]
-        case .xin:  return [("祿", "巨門"), ("權", "太陽"), ("科", "文曲"), ("忌", "文昌")]
-        case .ren:  return [("祿", "天梁"), ("權", "紫微"), ("科", "左輔"), ("忌", "武曲")]
-        case .gui:  return [("祿", "破軍"), ("權", "巨門"), ("科", "太陰"), ("忌", "貪狼")]
+        case .jia: return [("禄", "廉贞"), ("权", "破军"), ("科", "武曲"), ("忌", "太阳")]
+        case .yi:  return [("禄", "天机"), ("权", "天梁"), ("科", "紫微"), ("忌", "太阴")]
+        case .bing: return [("禄", "天同"), ("权", "天机"), ("科", "文昌"), ("忌", "廉贞")]
+        case .ding: return [("禄", "太阴"), ("权", "天同"), ("科", "天机"), ("忌", "巨门")]
+        case .wu:   return [("禄", "贪狼"), ("权", "太阴"), ("科", "右弼"), ("忌", "天机")]
+        case .ji:   return [("禄", "武曲"), ("权", "贪狼"), ("科", "天梁"), ("忌", "文曲")]
+        case .geng: return [("禄", "太阳"), ("权", "武曲"), ("科", "太阴"), ("忌", "天同")]
+        case .xin:  return [("禄", "巨门"), ("权", "太阳"), ("科", "文曲"), ("忌", "文昌")]
+        case .ren:  return [("禄", "天梁"), ("权", "紫微"), ("科", "左辅"), ("忌", "武曲")]
+        case .gui:  return [("禄", "破军"), ("权", "巨门"), ("科", "太阴"), ("忌", "贪狼")]
         }
     }
 
@@ -404,7 +404,7 @@ enum ZiweiAnalysis {
 // MARK: - Palace Convenience Extensions
 
 extension ZiweiPalace {
-    /// Whether the palace has no major stars (空宮)
+    /// Whether the palace has no major stars (空宫)
     var isEmpty: Bool {
         majorStars.isEmpty
     }

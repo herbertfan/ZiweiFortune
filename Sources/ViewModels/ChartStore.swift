@@ -8,13 +8,15 @@ final class ChartStore: ObservableObject {
     private let calculator = ZiweiCalculator.shared
 
     func calculateChart(for client: Client) -> ZiweiChart {
-        let chart = calculator.calculateChart(
+        var chart = calculator.calculateChart(
             birthYear: extractYear(from: client.birthDate),
             birthMonth: extractMonth(from: client.birthDate),
             birthDay: extractDay(from: client.birthDate),
             birthHour: client.birthTime.rawValue,
             gender: client.gender
         )
+        chart.clientId = client.id
+        chart.name = client.name
         currentChart = chart
 
         if let index = charts.firstIndex(where: { $0.clientId == client.id }) {
