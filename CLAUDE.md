@@ -35,3 +35,31 @@
    ```
 3. 執行 `git push` 推送到 GitHub 遠端目前分支
 4. 確認 push 成功後，才開始執行使用者的修改任務
+
+## Xcode 測試規範（每次修改程式碼後必須執行）
+
+### 專案資訊
+- 專案：ziwei-fortune.xcodeproj
+- Scheme：ziwei-fortune
+- 測試 Target：ziwei-fortuneTests
+
+### 強制規則
+每次修改任何 Swift 程式碼後，必須依序執行：
+
+1. 用 XcodeBuildMCP 工具執行建置與測試：
+```bash
+xcodebuild test \
+  -project ziwei-fortune.xcodeproj \
+  -scheme ziwei-fortune \
+  -destination 'platform=macOS' \
+  -resultBundlePath TestResults.xcresult 2>&1 | xcpretty --color
+```
+
+2. 若出現 BUILD FAILED 或 TEST FAILED → 停止當前任務，先修復
+3. 全部 PASSED 後，才可執行 git commit
+4. 每新增一個功能，必須在 ziwei-fortuneTests/ 目錄下新增對應的 XCTest 測試案例
+
+### TDD 開發流程
+1. 先寫 XCTest 測試（RED — 預期失敗）
+2. 再寫實作讓測試通過（GREEN）
+3. 重構程式碼，確認測試仍然通過（REFACTOR）
