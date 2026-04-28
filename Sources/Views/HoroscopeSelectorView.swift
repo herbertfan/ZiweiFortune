@@ -109,13 +109,12 @@ struct HoroscopeSelectorView: View {
                             .foregroundColor(selection.wrappedValue == option.index ? .blue : .secondary)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 3)
-                            .background(
-                                RoundedRectangle(cornerRadius: 4)
-                                    .fill(selection.wrappedValue == option.index ? Color.blue.opacity(0.1) : Color.clear)
-                            )
                             .overlay(
-                                RoundedRectangle(cornerRadius: 4)
-                                    .stroke(selection.wrappedValue == option.index ? Color.blue.opacity(0.4) : Color.clear, lineWidth: 1)
+                                Rectangle()
+                                    .fill(selection.wrappedValue == option.index ? Color.blue : Color.clear)
+                                    .frame(height: 2)
+                                    .padding(.horizontal, 2)
+                                , alignment: .bottom
                             )
                             .onTapGesture {
                                 withAnimation(.spring(response: 0.2, dampingFraction: 0.8)) {

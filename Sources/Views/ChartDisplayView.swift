@@ -115,24 +115,27 @@ struct ZiweiChartGridView: View {
         return ages
     }
 
-    /// 大限年份標註（每宮對應的年份與歲數）
+    /// 大限年份標註（大限期間，每年流年命宮落在此宮的年份與歲數）
     private func decadalYearAnnotations(for palaceIndex: Int) -> [(year: Int, age: Int)] {
         guard let decadalIndex = selectedDecadalPalaceIndex,
               let palace = chart.palaces.first(where: { $0.index == decadalIndex }),
               let decadal = palace.decadal,
               let birthYear = Int(chart.solarDate.prefix(4)) else { return [] }
 
-        // 大限的十二宮順序與本命相同，只是起點不同
-        // palaceIndex 在此大限中的位置
-        let offset = (palaceIndex - decadalIndex + 12) % 12
-        // 大限開始年份
+        var annotations: [(year: Int, age: Int)] = []
         let startYear = birthYear + decadal.range.0
-        // 此宮對應的歲數 = 大限開始歲數 + offset
-        let age = decadal.range.0 + offset
-        let year = startYear + offset
+        let endYear = birthYear + decadal.range.1
 
-        guard age <= decadal.range.1 else { return [] }
-        return [(year: year, age: age)]
+        for year in startYear...endYear {
+            let yearBranchIdx = (year - 4) % 12
+            let yb = yearBranchIdx >= 0 ? yearBranchIdx : yearBranchIdx + 12
+            let yearlyMingIndex = (yb + 10) % 12
+            if yearlyMingIndex == palaceIndex {
+                let age = year - birthYear + 1
+                annotations.append((year: year, age: age))
+            }
+        }
+        return annotations
     }
 
     private func palaceCell(at index: Int) -> some View {
