@@ -380,5 +380,6 @@
   "pattern_riyue_fanbei": "日月反背",
   "pattern_matou_daijian": "馬頭帶箭",
   "pattern_lucun_shouming": "祿存守命",
-  "select_client_to_chart": "選擇客戶後自動排盤"
+  "select_client_to_chart": "選擇客戶後自動排盤",
+  "yearly_age": "流年"
 }

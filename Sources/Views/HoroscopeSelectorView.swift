@@ -5,44 +5,68 @@ import SwiftUI
 struct HoroscopeSelectorView: View {
     let chart: ZiweiChart
 
-    @State private var selectedDecadal: Int = 0
-    @State private var selectedYear: Int = 0
-    @State private var selectedMonth: Int = 0
-    @State private var selectedDay: Int = 0
-    @State private var selectedHour: Int = 0
+    @Binding var selectedDecadal: Int
+    @Binding var selectedYear: Int
+    @Binding var selectedMonth: Int
+    @Binding var selectedDay: Int
+    @Binding var selectedHour: Int
+
+    private let heavenlyStems = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
+    private let earthlyBranches = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"]
 
     // 大限選項
     private var decadalOptions: [(index: Int, label: String)] {
         chart.palaces.enumerated().compactMap { i, palace in
             guard let decadal = palace.decadal else { return nil }
-            let label = "\(decadal.range.0)~\(decadal.range.1)"
+            let label = "\(decadal.range.0)~\(decadal.range.1) \(decadal.displayName)\(L("decadal_label"))"
             return (i, label)
         }
     }
 
-    // 流年選項（出生年前後各30年）
+    // 出生年份
     private var birthYear: Int {
-        // 嘗試從 solarDate 解析年份，否則從四柱年干推算近似的
         let components = chart.solarDate.split(separator: "-").compactMap { Int($0) }
-        if let year = components.first {
-            return year
-        }
-        // fallback: 從 createdAt 或 default
-        return 2000
+        return components.first ?? 2000
     }
 
-    private var yearlyOptions: [Int] {
-        Array((birthYear - 30)...(birthYear + 30))
+    // 流年選項（出生年前後各30年）
+    private var yearlyOptions: [(index: Int, label: String)] {
+        Array((birthYear - 30)...(birthYear + 30)).map { year in
+            let stemIdx = (year - 4) % 10
+            let branchIdx = (year - 4) % 12
+            let stem = heavenlyStems[stemIdx >= 0 ? stemIdx : stemIdx + 10]
+            let branch = earthlyBranches[branchIdx >= 0 ? branchIdx : branchIdx + 12]
+            let age = year - birthYear + 1
+            let label = "\(year)\(L("year_unit")) \(stem)\(branch)\(age)\(L("age_unit"))"
+            return (year, label)
+        }
     }
 
     // 流月選項
     private var monthlyOptions: [(index: Int, label: String)] {
-        (1...12).map { ($0, L("month_\($0)")) }
+        let baseYear = selectedYear > 0 ? selectedYear : birthYear
+        return (1...12).map { month in
+            let monthStemIdx = (baseYear - 4 + month - 1) % 10
+            let monthBranchIdx = (month + 1) % 12
+            let stem = heavenlyStems[monthStemIdx >= 0 ? monthStemIdx : monthStemIdx + 10]
+            let branch = earthlyBranches[monthBranchIdx >= 0 ? monthBranchIdx : monthBranchIdx + 12]
+            let label = "\(L("month_\(month)"))\(stem)\(branch)"
+            return (month, label)
+        }
     }
 
     // 流日選項
     private var dailyOptions: [(index: Int, label: String)] {
-        (1...30).map { ($0, "\($0)\(L("label_day"))") }
+        let baseYear = selectedYear > 0 ? selectedYear : birthYear
+        let baseMonth = selectedMonth > 0 ? selectedMonth : 1
+        return (1...30).map { day in
+            let dayStemIdx = (baseYear - 4 + baseMonth - 1 + day - 1) % 10
+            let dayBranchIdx = (day - 1) % 12
+            let stem = heavenlyStems[dayStemIdx >= 0 ? dayStemIdx : dayStemIdx + 10]
+            let branch = earthlyBranches[dayBranchIdx >= 0 ? dayBranchIdx : dayBranchIdx + 12]
+            let label = "\(day)\(L("label_day"))\(stem)\(branch)"
+            return (day, label)
+        }
     }
 
     // 流時選項
@@ -59,7 +83,7 @@ struct HoroscopeSelectorView: View {
 
             VStack(spacing: 4) {
                 selectorRow(title: L("tab_decadal"), options: decadalOptions.map { ($0.index, $0.label) }, selection: $selectedDecadal)
-                selectorRow(title: L("tab_yearly"), options: yearlyOptions.map { ($0, "\($0)\(L("year_unit"))") }, selection: $selectedYear)
+                selectorRow(title: L("tab_yearly"), options: yearlyOptions, selection: $selectedYear)
                 selectorRow(title: L("tab_monthly"), options: monthlyOptions, selection: $selectedMonth)
                 selectorRow(title: L("tab_daily"), options: dailyOptions, selection: $selectedDay)
                 selectorRow(title: L("tab_hourly"), options: hourlyOptions, selection: $selectedHour)
@@ -95,7 +119,11 @@ struct HoroscopeSelectorView: View {
                             )
                             .onTapGesture {
                                 withAnimation(.spring(response: 0.2, dampingFraction: 0.8)) {
-                                    selection.wrappedValue = option.index
+                                    if selection.wrappedValue == option.index {
+                                        selection.wrappedValue = 0
+                                    } else {
+                                        selection.wrappedValue = option.index
+                                    }
                                 }
                             }
                     }

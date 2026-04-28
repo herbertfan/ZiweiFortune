@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(swiftc -typecheck *)",
+      "Bash(sips -g *)"
+    ]
+  }
+}
