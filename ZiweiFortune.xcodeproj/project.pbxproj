@@ -1,0 +1,535 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		066CE3AF1CE625EA0A1484E8 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6CA38C9C35AC1385412398 /* Language.swift */; };
+		0C98DB9CC301A99376CAE10E /* LifeKLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC1CEFED99523C7E03EB096 /* LifeKLineView.swift */; };
+		12CCDDB8B43525F59FF97E22 /* ZiweiAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C8DF43E5FCC48B8F6CA223 /* ZiweiAnalysis.swift */; };
+		17CCDE3CF51B63C6964A8985 /* ClientFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A10B0D46672A51D7756B74 /* ClientFormView.swift */; };
+		181514E2CCC1C7A4245BE71A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6470914D49C5623803C349E /* ContentView.swift */; };
+		1BA3230C942D22F77023E47F /* zh-Hant.json in Resources */ = {isa = PBXBuildFile; fileRef = 36EA116A42B33BD2EB26C97B /* zh-Hant.json */; };
+		1D908A38C0D565C1D67E709F /* ZiweiChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8032360064E34FAA9F3A28BB /* ZiweiChart.swift */; };
+		20A45BF69A0E10D5F8181C64 /* ChartingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4529C0531C6E9AA5F8EDE4 /* ChartingView.swift */; };
+		259F8BD85A5BFAD30D3F21EE /* ZiweiTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F042784ED9381414880FC9D3 /* ZiweiTypes.swift */; };
+		267C897BCC038D54F3C58449 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = C68D9E1137772A4FE34EAA4E /* SQLite */; };
+		31526DF37CC693A7F719099D /* LLMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF710815B667593B51D330A6 /* LLMService.swift */; };
+		3E0F3C15E96D38FC2602A407 /* PatternsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA17147A71898D33FE379C16 /* PatternsView.swift */; };
+		57250F4E1B47F3C575750CDA /* ClientStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3189C16D39DFA250E721A11 /* ClientStore.swift */; };
+		5D0B380CC21651D5D77CED8C /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DFC341CF7B289571355F88 /* DataStore.swift */; };
+		5E276EABA4243123935547D8 /* LocalizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A62D22088698D71D12492D /* LocalizationManager.swift */; };
+		61CE59940BD6D483D911B315 /* ClientListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB371A26E34DB149B297910F /* ClientListView.swift */; };
+		6B0FA32050DB96DE505AC8DB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED6C9E3641AE6405AEB611A /* SettingsView.swift */; };
+		7544F4C5678644484C58E577 /* LocalizedEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03320A0B13277DB284E81D1 /* LocalizedEnums.swift */; };
+		774A22E8174CDE6DE32D7F62 /* ja.json in Resources */ = {isa = PBXBuildFile; fileRef = 0AF837794DC5CE1BD98EC3D2 /* ja.json */; };
+		8B2BF0F30E9EAB51DF83AF87 /* ChartStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58856C0F4ED48AE1D4993673 /* ChartStore.swift */; };
+		8D8966FD1032CF85F5504827 /* zh-Hans.json in Resources */ = {isa = PBXBuildFile; fileRef = 5AD881B278C4465B44A0644E /* zh-Hans.json */; };
+		9193B0480A997D3CA06C9702 /* AIInterpretationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C854C12D51E370CF11CBEBF /* AIInterpretationView.swift */; };
+		A50BF5973B8497ACE661747A /* LLMConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F02F73676664C446E6F0A66 /* LLMConfig.swift */; };
+		AB17B9B96E94FF3777A01A00 /* en.json in Resources */ = {isa = PBXBuildFile; fileRef = 41461A27833B0A59ADE14CD8 /* en.json */; };
+		B71C886D06BAC756773EF06B /* KnowledgeBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBCE24B3C1551C50FF2E94F /* KnowledgeBase.swift */; };
+		B90A9E1FB57AF46758D01BD6 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87655A6B07FC7382A34C0582 /* Color+Hex.swift */; };
+		CF72C4B77AD042505A40F897 /* CoupleMatchingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0FC4C41B98612EA2A77776 /* CoupleMatchingView.swift */; };
+		D2890F46A1F90C809B5AF99D /* ZiweiCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2034D8E3CD933DD7665B66 /* ZiweiCalculator.swift */; };
+		DF50ACC508C239CF2E8BD3FC /* ChartDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 306DD5C7D1D7C858A5BA526E /* ChartDisplayView.swift */; };
+		E964698C298655E9CC8BB880 /* ZiweiFortuneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6252EC2FE24333F300CA29 /* ZiweiFortuneApp.swift */; };
+		F2B0DE0192BB1D449DA7C4AA /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE467931C0EA02E804DE84A /* SettingsStore.swift */; };
+		F623E43E63641454AEF6400B /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6404D078E18FEF222BAF26D9 /* Client.swift */; };
+		7c36ea5e3d014010afd8574263872bcf /* HoroscopeSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34d94e75c0564eab8a516a2a3d82944a /* HoroscopeSelectorView.swift */; };
+		2a3e881ad0e04a0996fd9038b9cb780f /* Localization+Astro.swift in Sources */ = {isa = PBXBuildFile; fileRef = d617d9a9e0804d1a8a552780ec99dfaf /* Localization+Astro.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0AF837794DC5CE1BD98EC3D2 /* ja.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ja.json; sourceTree = "<group>"; };
+		0C6252EC2FE24333F300CA29 /* ZiweiFortuneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZiweiFortuneApp.swift; sourceTree = "<group>"; };
+		1F02F73676664C446E6F0A66 /* LLMConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMConfig.swift; sourceTree = "<group>"; };
+		2C854C12D51E370CF11CBEBF /* AIInterpretationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIInterpretationView.swift; sourceTree = "<group>"; };
+		306DD5C7D1D7C858A5BA526E /* ChartDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDisplayView.swift; sourceTree = "<group>"; };
+		33DFC341CF7B289571355F88 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		36EA116A42B33BD2EB26C97B /* zh-Hant.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "zh-Hant.json"; sourceTree = "<group>"; };
+		3ED6C9E3641AE6405AEB611A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		41461A27833B0A59ADE14CD8 /* en.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = en.json; sourceTree = "<group>"; };
+		51A62D22088698D71D12492D /* LocalizationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationManager.swift; sourceTree = "<group>"; };
+		d617d9a9e0804d1a8a552780ec99dfaf /* Localization+Astro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Localization+Astro.swift"; sourceTree = "<group>"; };
+		56A10B0D46672A51D7756B74 /* ClientFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientFormView.swift; sourceTree = "<group>"; };
+		58856C0F4ED48AE1D4993673 /* ChartStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartStore.swift; sourceTree = "<group>"; };
+		5AD881B278C4465B44A0644E /* zh-Hans.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "zh-Hans.json"; sourceTree = "<group>"; };
+		6404D078E18FEF222BAF26D9 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
+		6A0FC4C41B98612EA2A77776 /* CoupleMatchingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoupleMatchingView.swift; sourceTree = "<group>"; };
+		75C14BA1DC480FF8933F2CFF /* ZiweiFortune.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZiweiFortune.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B4529C0531C6E9AA5F8EDE4 /* ChartingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartingView.swift; sourceTree = "<group>"; };
+		8032360064E34FAA9F3A28BB /* ZiweiChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZiweiChart.swift; sourceTree = "<group>"; };
+		87655A6B07FC7382A34C0582 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
+		8DBCE24B3C1551C50FF2E94F /* KnowledgeBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnowledgeBase.swift; sourceTree = "<group>"; };
+		A3189C16D39DFA250E721A11 /* ClientStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientStore.swift; sourceTree = "<group>"; };
+		A6470914D49C5623803C349E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		BDC1CEFED99523C7E03EB096 /* LifeKLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeKLineView.swift; sourceTree = "<group>"; };
+		C0C8DF43E5FCC48B8F6CA223 /* ZiweiAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZiweiAnalysis.swift; sourceTree = "<group>"; };
+		CA17147A71898D33FE379C16 /* PatternsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternsView.swift; sourceTree = "<group>"; };
+		CB371A26E34DB149B297910F /* ClientListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientListView.swift; sourceTree = "<group>"; };
+		D03320A0B13277DB284E81D1 /* LocalizedEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedEnums.swift; sourceTree = "<group>"; };
+		DF710815B667593B51D330A6 /* LLMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMService.swift; sourceTree = "<group>"; };
+		E86C976D789F7FF4E9C1DE9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		ECE467931C0EA02E804DE84A /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		ED2034D8E3CD933DD7665B66 /* ZiweiCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZiweiCalculator.swift; sourceTree = "<group>"; };
+		F042784ED9381414880FC9D3 /* ZiweiTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZiweiTypes.swift; sourceTree = "<group>"; };
+		FC6CA38C9C35AC1385412398 /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
+		34d94e75c0564eab8a516a2a3d82944a /* HoroscopeSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoroscopeSelectorView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A894ED2451F2DCAEE6F0B779 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				267C897BCC038D54F3C58449 /* SQLite in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1099F250DB6AC69DC5C2FB30 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				E86C976D789F7FF4E9C1DE9F /* Info.plist */,
+				31CC18234418613D59FDF19C /* App */,
+				755DA2B4A7A918EA94D0656F /* Extensions */,
+				93683F06DC18C33D19F5AC75 /* Localization */,
+				AD86EFA8E4484DDC943AA18C /* Models */,
+				62EA7F71B6EB6B0A684D8565 /* Resources */,
+				D3B4C61223EFF310E2B1A7AC /* Services */,
+				7D4597A9B54610DC04FE8D0D /* Utilities */,
+				600BE6431CF31249C0AEF59E /* ViewModels */,
+				C7F59217F92D640A2CB509EE /* Views */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		31CC18234418613D59FDF19C /* App */ = {
+			isa = PBXGroup;
+			children = (
+				0C6252EC2FE24333F300CA29 /* ZiweiFortuneApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		600BE6431CF31249C0AEF59E /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				58856C0F4ED48AE1D4993673 /* ChartStore.swift */,
+				A3189C16D39DFA250E721A11 /* ClientStore.swift */,
+				ECE467931C0EA02E804DE84A /* SettingsStore.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		62EA7F71B6EB6B0A684D8565 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				41461A27833B0A59ADE14CD8 /* en.json */,
+				0AF837794DC5CE1BD98EC3D2 /* ja.json */,
+				5AD881B278C4465B44A0644E /* zh-Hans.json */,
+				36EA116A42B33BD2EB26C97B /* zh-Hant.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		755DA2B4A7A918EA94D0656F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				87655A6B07FC7382A34C0582 /* Color+Hex.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		7D4597A9B54610DC04FE8D0D /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		93683F06DC18C33D19F5AC75 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				FC6CA38C9C35AC1385412398 /* Language.swift */,
+				51A62D22088698D71D12492D /* LocalizationManager.swift */,
+				D03320A0B13277DB284E81D1 /* LocalizedEnums.swift */,
+				d617d9a9e0804d1a8a552780ec99dfaf /* Localization+Astro.swift */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
+		AD86EFA8E4484DDC943AA18C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6404D078E18FEF222BAF26D9 /* Client.swift */,
+				1F02F73676664C446E6F0A66 /* LLMConfig.swift */,
+				8032360064E34FAA9F3A28BB /* ZiweiChart.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C2F275EC1A82846832A6792B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				75C14BA1DC480FF8933F2CFF /* ZiweiFortune.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C7F59217F92D640A2CB509EE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2C854C12D51E370CF11CBEBF /* AIInterpretationView.swift */,
+				306DD5C7D1D7C858A5BA526E /* ChartDisplayView.swift */,
+				7B4529C0531C6E9AA5F8EDE4 /* ChartingView.swift */,
+				56A10B0D46672A51D7756B74 /* ClientFormView.swift */,
+				CB371A26E34DB149B297910F /* ClientListView.swift */,
+				A6470914D49C5623803C349E /* ContentView.swift */,
+				6A0FC4C41B98612EA2A77776 /* CoupleMatchingView.swift */,
+				BDC1CEFED99523C7E03EB096 /* LifeKLineView.swift */,
+				CA17147A71898D33FE379C16 /* PatternsView.swift */,
+				3ED6C9E3641AE6405AEB611A /* SettingsView.swift */,
+				34d94e75c0564eab8a516a2a3d82944a /* HoroscopeSelectorView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D3B4C61223EFF310E2B1A7AC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				33DFC341CF7B289571355F88 /* DataStore.swift */,
+				8DBCE24B3C1551C50FF2E94F /* KnowledgeBase.swift */,
+				DF710815B667593B51D330A6 /* LLMService.swift */,
+				C0C8DF43E5FCC48B8F6CA223 /* ZiweiAnalysis.swift */,
+				ED2034D8E3CD933DD7665B66 /* ZiweiCalculator.swift */,
+				F042784ED9381414880FC9D3 /* ZiweiTypes.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		FD9403F7EB63752E8C32195B = {
+			isa = PBXGroup;
+			children = (
+				1099F250DB6AC69DC5C2FB30 /* Sources */,
+				C2F275EC1A82846832A6792B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8060E668DD0AE574CCE41930 /* ZiweiFortune */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 334EFB187B8A0A2A094577C1 /* Build configuration list for PBXNativeTarget "ZiweiFortune" */;
+			buildPhases = (
+				C04EAF12AA3EA8C59A2FA99C /* Sources */,
+				4D58EF03493951A3B53ED18A /* Resources */,
+				A894ED2451F2DCAEE6F0B779 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ZiweiFortune;
+			packageProductDependencies = (
+				C68D9E1137772A4FE34EAA4E /* SQLite */,
+			);
+			productName = ZiweiFortune;
+			productReference = 75C14BA1DC480FF8933F2CFF /* ZiweiFortune.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9C4A94FED34A7E902F5B2604 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					8060E668DD0AE574CCE41930 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = BB99A6470DEF7CD41E6C8B3D /* Build configuration list for PBXProject "ZiweiFortune" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = FD9403F7EB63752E8C32195B;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F88C425EE64B6D5AC543428C /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = C2F275EC1A82846832A6792B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8060E668DD0AE574CCE41930 /* ZiweiFortune */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4D58EF03493951A3B53ED18A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB17B9B96E94FF3777A01A00 /* en.json in Resources */,
+				774A22E8174CDE6DE32D7F62 /* ja.json in Resources */,
+				8D8966FD1032CF85F5504827 /* zh-Hans.json in Resources */,
+				1BA3230C942D22F77023E47F /* zh-Hant.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C04EAF12AA3EA8C59A2FA99C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9193B0480A997D3CA06C9702 /* AIInterpretationView.swift in Sources */,
+				DF50ACC508C239CF2E8BD3FC /* ChartDisplayView.swift in Sources */,
+				8B2BF0F30E9EAB51DF83AF87 /* ChartStore.swift in Sources */,
+				20A45BF69A0E10D5F8181C64 /* ChartingView.swift in Sources */,
+				F623E43E63641454AEF6400B /* Client.swift in Sources */,
+				17CCDE3CF51B63C6964A8985 /* ClientFormView.swift in Sources */,
+				61CE59940BD6D483D911B315 /* ClientListView.swift in Sources */,
+				57250F4E1B47F3C575750CDA /* ClientStore.swift in Sources */,
+				B90A9E1FB57AF46758D01BD6 /* Color+Hex.swift in Sources */,
+				181514E2CCC1C7A4245BE71A /* ContentView.swift in Sources */,
+				CF72C4B77AD042505A40F897 /* CoupleMatchingView.swift in Sources */,
+				5D0B380CC21651D5D77CED8C /* DataStore.swift in Sources */,
+				B71C886D06BAC756773EF06B /* KnowledgeBase.swift in Sources */,
+				A50BF5973B8497ACE661747A /* LLMConfig.swift in Sources */,
+				31526DF37CC693A7F719099D /* LLMService.swift in Sources */,
+				066CE3AF1CE625EA0A1484E8 /* Language.swift in Sources */,
+				0C98DB9CC301A99376CAE10E /* LifeKLineView.swift in Sources */,
+				5E276EABA4243123935547D8 /* LocalizationManager.swift in Sources */,
+				2a3e881ad0e04a0996fd9038b9cb780f /* Localization+Astro.swift in Sources */,
+				7544F4C5678644484C58E577 /* LocalizedEnums.swift in Sources */,
+				3E0F3C15E96D38FC2602A407 /* PatternsView.swift in Sources */,
+				F2B0DE0192BB1D449DA7C4AA /* SettingsStore.swift in Sources */,
+				6B0FA32050DB96DE505AC8DB /* SettingsView.swift in Sources */,
+				7c36ea5e3d014010afd8574263872bcf /* HoroscopeSelectorView.swift in Sources */,
+				12CCDDB8B43525F59FF97E22 /* ZiweiAnalysis.swift in Sources */,
+				D2890F46A1F90C809B5AF99D /* ZiweiCalculator.swift in Sources */,
+				1D908A38C0D565C1D67E709F /* ZiweiChart.swift in Sources */,
+				E964698C298655E9CC8BB880 /* ZiweiFortuneApp.swift in Sources */,
+				259F8BD85A5BFAD30D3F21EE /* ZiweiTypes.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		06E7E4D83820BD66614C839A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "紫微斗數";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		882F75980B841E2F4F6FFE1F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = Sources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ziwei.fortune;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		8D17D9EAFB76B8D09E196421 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "紫微斗數";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		CBEF4888D789C4EA18618B23 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = Sources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ziwei.fortune;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		334EFB187B8A0A2A094577C1 /* Build configuration list for PBXNativeTarget "ZiweiFortune" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				882F75980B841E2F4F6FFE1F /* Debug */,
+				CBEF4888D789C4EA18618B23 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BB99A6470DEF7CD41E6C8B3D /* Build configuration list for PBXProject "ZiweiFortune" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				06E7E4D83820BD66614C839A /* Debug */,
+				8D17D9EAFB76B8D09E196421 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F88C425EE64B6D5AC543428C /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.15.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C68D9E1137772A4FE34EAA4E /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F88C425EE64B6D5AC543428C /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 9C4A94FED34A7E902F5B2604 /* Project object */;
+}
