@@ -138,6 +138,36 @@ struct ZiweiChartGridView: View {
         return annotations
     }
 
+    /// 當前選中運限的天干（用於四化顯示）
+    private var activePeriodStem: HeavenlyStem? {
+        switch activeHoroscopeLayer {
+        case .natal: return nil
+        case .decadal: return chart.horoscope.decadal?.heavenlyStem
+        case .yearly: return chart.horoscope.yearly?.heavenlyStem
+        case .monthly: return chart.horoscope.monthly?.heavenlyStem
+        case .daily: return chart.horoscope.daily?.heavenlyStem
+        case .hourly: return chart.horoscope.hourly?.heavenlyStem
+        }
+    }
+
+    /// 當前選中運限的流耀（顯示在對應宮位）
+    private func activePeriodStars(for palaceIndex: Int) -> [PlacedStar] {
+        guard let periodData = {
+            switch activeHoroscopeLayer {
+            case .natal: return nil as PeriodData?
+            case .decadal: return chart.horoscope.decadal
+            case .yearly: return chart.horoscope.yearly
+            case .monthly: return chart.horoscope.monthly
+            case .daily: return chart.horoscope.daily
+            case .hourly: return chart.horoscope.hourly
+            }
+        }() else { return [] }
+        let mingIndex = periodData.index
+        let offset = (palaceIndex - mingIndex + 12) % 12
+        guard offset < periodData.flowStars.count else { return [] }
+        return periodData.flowStars[offset]
+    }
+
     private func palaceCell(at index: Int) -> some View {
         let flies = showFlyingStars
             ? ZiweiAnalysis.flyingStars(fromPalaceIndex: index, palaces: chart.palaces)
@@ -159,6 +189,10 @@ struct ZiweiChartGridView: View {
         // 大限年份標註
         let dAnnotations = decadalYearAnnotations(for: index)
 
+        // 當前運限的流耀與天干
+        let periodStem = activePeriodStem
+        let periodStars = activePeriodStars(for: index)
+
         return PalaceCell(
             palace: chart.palaces[index],
             isMingGong: chart.mingGongIndex == index,
@@ -176,7 +210,9 @@ struct ZiweiChartGridView: View {
             dailyLabel: dailyPalaceLabels[index],
             hourlyLabel: hourlyPalaceLabels[index],
             activeHoroscopeLabel: activeLabel,
-            decadalAnnotations: dAnnotations
+            decadalAnnotations: dAnnotations,
+            periodStem: periodStem,
+            periodStars: periodStars
         )
         .onTapGesture {
             withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
@@ -345,6 +381,16 @@ struct PalaceCellCenter: View {
         return "流時：\(branch.displayName)"
     }
 
+    /// 大限年齡軸資料（所有大限按起始歲數排序）
+    private var decadalAxisItems: [(startAge: Int, startYear: Int, displayName: String)] {
+        let items = chart.palaces.compactMap { palace -> (startAge: Int, startYear: Int, displayName: String)? in
+            guard let decadal = palace.decadal else { return nil }
+            let startYear = birthYear + decadal.range.0
+            return (startAge: decadal.range.0, startYear: startYear, displayName: decadal.displayName)
+        }
+        return items.sorted { $0.startAge < $1.startAge }
+    }
+
     var body: some View {
         VStack(spacing: 5) {
             // 姓名
@@ -440,6 +486,30 @@ struct PalaceCellCenter: View {
                 Text(chart.fourPillars.day.displayName).font(.system(size: 12, weight: .medium))
                 Text(chart.fourPillars.hour.displayName).font(.system(size: 12, weight: .medium))
             }
+
+            // 大限年齡軸
+            if !decadalAxisItems.isEmpty {
+                VStack(spacing: 2) {
+                    HStack(spacing: 0) {
+                        ForEach(Array(decadalAxisItems.enumerated()), id: \.offset) { idx, item in
+                            VStack(spacing: 0) {
+                                Text("\(item.startAge)")
+                                    .font(.system(size: 9))
+                                    .foregroundColor(.secondary)
+                                Text("\(item.startYear)")
+                                    .font(.system(size: 8))
+                                    .foregroundColor(Color(hex: "#9E9E9E"))
+                            }
+                            .frame(maxWidth: .infinity)
+                            if idx != decadalAxisItems.count - 1 {
+                                Divider()
+                                    .frame(height: 16)
+                            }
+                        }
+                    }
+                }
+                .padding(.horizontal, 4)
+            }
         }
         .padding(10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -475,6 +545,8 @@ struct PalaceCell: View {
     let hourlyLabel: String?
     let activeHoroscopeLabel: String?
     let decadalAnnotations: [(year: Int, age: Int)]
+    let periodStem: HeavenlyStem?
+    let periodStars: [PlacedStar]
 
     private var palaceColor: Color {
         if isMingGong { return Color(hex: "#1A73E8") }
@@ -630,7 +702,19 @@ struct PalaceCell: View {
                     }
                 }
 
-                // 四化 badges（保留獨立顯示作為備援）
+                // 流耀（運限星曜）
+                if !periodStars.isEmpty {
+                    HStack(spacing: 3) {
+                        ForEach(periodStars.prefix(8), id: \.name) { star in
+                            Text(star.displayName)
+                                .font(.system(size: 9, weight: .medium))
+                                .foregroundColor(.orange)
+                                .fixedSize()
+                        }
+                    }
+                }
+
+                // 四化 badges（本命四化）
                 if !starTransformations.isEmpty {
                     HStack(spacing: 3) {
                         ForEach(starTransformations.prefix(4), id: \.star) { item in
@@ -642,6 +726,41 @@ struct PalaceCell: View {
                                 .background(transformationColor(item.trans))
                                 .cornerRadius(2)
                         }
+                    }
+                }
+
+                // 運限四化 badges
+                if let stem = periodStem {
+                    let trans = stem.transformations
+                    HStack(spacing: 3) {
+                        Text("\(trans[0].displayName)祿")
+                            .font(.system(size: 8, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 3)
+                            .padding(.vertical, 1)
+                            .background(Color(hex: "#4CAF50"))
+                            .cornerRadius(2)
+                        Text("\(trans[1].displayName)權")
+                            .font(.system(size: 8, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 3)
+                            .padding(.vertical, 1)
+                            .background(Color(hex: "#9C27B0"))
+                            .cornerRadius(2)
+                        Text("\(trans[2].displayName)科")
+                            .font(.system(size: 8, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 3)
+                            .padding(.vertical, 1)
+                            .background(Color(hex: "#2196F3"))
+                            .cornerRadius(2)
+                        Text("\(trans[3].displayName)忌")
+                            .font(.system(size: 8, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 3)
+                            .padding(.vertical, 1)
+                            .background(Color(hex: "#F44336"))
+                            .cornerRadius(2)
                     }
                 }
 
