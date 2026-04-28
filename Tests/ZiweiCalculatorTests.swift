@@ -190,4 +190,84 @@ final class ZiweiCalculatorTests: XCTestCase {
         let names2 = ZiweiCalculator.shared.rotatePalaceNames(fromIndex: 3)
         XCTAssertEqual(names2[3], "命宮", "从索引3旋转后，索引3应为命宫")
     }
+
+    // MARK: - 運限資料驗證
+
+    func testHoroscopeData_Yearly() {
+        let result = calc.calculateChart(
+            birthYear: 1987, birthMonth: 2, birthDay: 19,
+            birthHour: 1, gender: .male, isLeapMonth: false
+        )
+        XCTAssertNotNil(result.horoscope.yearly, "應有流年資料")
+        if let yearly = result.horoscope.yearly {
+            XCTAssertGreaterThan(yearly.heavenlyStem.rawValue, -1, "流年天干應有效")
+            XCTAssertGreaterThan(yearly.earthlyBranch.rawValue, -1, "流年地支應有效")
+            XCTAssertEqual(yearly.palaceNames.count, 12, "流年應有12宮名稱")
+        }
+    }
+
+    func testHoroscopeData_Monthly() {
+        let result = calc.calculateChart(
+            birthYear: 1987, birthMonth: 2, birthDay: 19,
+            birthHour: 1, gender: .male, isLeapMonth: false
+        )
+        XCTAssertNotNil(result.horoscope.monthly, "應有流月資料")
+        if let monthly = result.horoscope.monthly {
+            XCTAssertEqual(monthly.palaceNames.count, 12, "流月應有12宮名稱")
+            XCTAssertGreaterThan(monthly.mutagen.count, 0, "流月應有四化")
+        }
+    }
+
+    func testHoroscopeData_Daily() {
+        let result = calc.calculateChart(
+            birthYear: 1987, birthMonth: 2, birthDay: 19,
+            birthHour: 1, gender: .male, isLeapMonth: false
+        )
+        XCTAssertNotNil(result.horoscope.daily, "應有流日資料")
+        if let daily = result.horoscope.daily {
+            XCTAssertEqual(daily.palaceNames.count, 12, "流日應有12宮名稱")
+        }
+    }
+
+    func testHoroscopeData_Hourly() {
+        let result = calc.calculateChart(
+            birthYear: 1987, birthMonth: 2, birthDay: 19,
+            birthHour: 1, gender: .male, isLeapMonth: false
+        )
+        XCTAssertNotNil(result.horoscope.hourly, "應有流時資料")
+        if let hourly = result.horoscope.hourly {
+            XCTAssertEqual(hourly.palaceNames.count, 12, "流時應有12宮名稱")
+        }
+    }
+
+    func testYearlyPalaceLabels() {
+        let chart = calc.calculateChart(
+            birthYear: 1987, birthMonth: 2, birthDay: 19,
+            birthHour: 1, gender: .male, isLeapMonth: false
+        )
+        guard let yearly = chart.horoscope.yearly else {
+            XCTFail("應有流年資料")
+            return
+        }
+        let mingIndex = yearly.index
+        let labels = ["年命", "年兄", "年夫", "年子", "年财", "年疾", "年迁", "年友", "年官", "年田", "年福", "年父"]
+        for i in 0..<12 {
+            let palaceIndex = (mingIndex + i) % 12
+            let expectedLabel = labels[i]
+            XCTAssertEqual(chart.palaces[palaceIndex].name, yearly.palaceNames[palaceIndex], "宮位名稱應一致")
+        }
+    }
+
+    func testDecadalPeriodHasValidRange() {
+        let chart = calc.calculateChart(
+            birthYear: 1987, birthMonth: 2, birthDay: 19,
+            birthHour: 1, gender: .male, isLeapMonth: false
+        )
+        let decadalPalaces = chart.palaces.compactMap { $0.decadal }
+        XCTAssertFalse(decadalPalaces.isEmpty, "應有大限資料")
+        for decadal in decadalPalaces {
+            XCTAssertLessThan(decadal.range.0, decadal.range.1, "大限起始歲數應小於結束歲數")
+            XCTAssertGreaterThanOrEqual(decadal.range.0, 0, "大限起始歲數應大於等於0")
+        }
+    }
 }

@@ -1,5 +1,18 @@
 import SwiftUI
 
+// MARK: - 運限層級
+
+enum HoroscopeLayer: String, CaseIterable {
+    case natal = "本"
+    case decadal = "限"
+    case yearly = "年"
+    case monthly = "月"
+    case daily = "日"
+    case hourly = "時"
+
+    var displayName: String { rawValue }
+}
+
 // MARK: - 親盤交叉命盤
 
 struct ZiweiChartGridView: View {
@@ -8,6 +21,10 @@ struct ZiweiChartGridView: View {
     let showFlyingStars: Bool
     let selectedDecadalPalaceIndex: Int?
     let selectedYear: Int?
+    let selectedMonth: Int
+    let selectedDay: Int
+    let selectedHour: Int
+    let activeHoroscopeLayer: HoroscopeLayer
     @State private var selectedPalaceIndex: Int? = nil
 
     private var genderYinyang: String {
@@ -32,21 +49,57 @@ struct ZiweiChartGridView: View {
         return chart.palaces[oppositeIndex].majorStars
     }
 
-    /// 流年十二宮標籤（年命、年父、年夫...）
-    private var yearlyPalaceLabels: [Int: String] {
-        guard let year = selectedYear else { return [:] }
-        let yearBranchIdx = (year - 4) % 12
-        let yearlyMingIndex = ((yearBranchIdx >= 0 ? yearBranchIdx : yearBranchIdx + 12) + 10) % 12
-        let labels = ["年命", "年兄", "年夫", "年子", "年财", "年疾", "年迁", "年友", "年官", "年田", "年福", "年父"]
+    // MARK: - 運限十二宮標籤計算
+
+    private func horoscopeLabels(for mingIndex: Int, prefix: String) -> [Int: String] {
+        let labels = ["\(prefix)命", "\(prefix)兄", "\(prefix)夫", "\(prefix)子", "\(prefix)财", "\(prefix)疾", "\(prefix)迁", "\(prefix)友", "\(prefix)官", "\(prefix)田", "\(prefix)福", "\(prefix)父"]
         var result: [Int: String] = [:]
         for i in 0..<12 {
-            let palaceIndex = (yearlyMingIndex + i) % 12
+            let palaceIndex = (mingIndex + i) % 12
             result[palaceIndex] = labels[i]
         }
         return result
     }
 
-    /// 每宮的流年歲數列表（所有會落入此宮的流年虛歲）
+    /// 大限十二宮標籤
+    private var decadalPalaceLabels: [Int: String] {
+        guard let decadalIndex = selectedDecadalPalaceIndex else { return [:] }
+        return horoscopeLabels(for: decadalIndex, prefix: "大")
+    }
+
+    /// 流年十二宮標籤
+    private var yearlyPalaceLabels: [Int: String] {
+        guard let year = selectedYear else { return [:] }
+        let yearBranchIdx = (year - 4) % 12
+        let yearlyMingIndex = ((yearBranchIdx >= 0 ? yearBranchIdx : yearBranchIdx + 12) + 10) % 12
+        return horoscopeLabels(for: yearlyMingIndex, prefix: "年")
+    }
+
+    /// 流月十二宮標籤
+    private var monthlyPalaceLabels: [Int: String] {
+        guard selectedMonth > 0 else { return [:] }
+        let baseYear = selectedYear.flatMap { $0 > 0 ? $0 : nil } ?? (Int(chart.solarDate.prefix(4)) ?? 2000)
+        let monthBranchIdx = (selectedMonth + 1) % 12
+        let monthlyMingIndex = ((monthBranchIdx >= 0 ? monthBranchIdx : monthBranchIdx + 12) + 10) % 12
+        return horoscopeLabels(for: monthlyMingIndex, prefix: "月")
+    }
+
+    /// 流日十二宮標籤
+    private var dailyPalaceLabels: [Int: String] {
+        guard selectedDay > 0 else { return [:] }
+        let dayBranchIdx = (selectedDay - 1) % 12
+        let dailyMingIndex = ((dayBranchIdx >= 0 ? dayBranchIdx : dayBranchIdx + 12) + 10) % 12
+        return horoscopeLabels(for: dailyMingIndex, prefix: "日")
+    }
+
+    /// 流時十二宮標籤
+    private var hourlyPalaceLabels: [Int: String] {
+        guard selectedHour >= 0 else { return [:] }
+        let hourlyMingIndex = ((selectedHour >= 0 ? selectedHour : selectedHour + 12) + 10) % 12
+        return horoscopeLabels(for: hourlyMingIndex, prefix: "時")
+    }
+
+    /// 每宮的流年歲數列表
     private func yearlyAges(for palaceIndex: Int) -> [Int] {
         guard let birthYear = Int(chart.solarDate.prefix(4)) else { return [] }
         var ages: [Int] = []
@@ -62,12 +115,47 @@ struct ZiweiChartGridView: View {
         return ages
     }
 
+    /// 大限年份標註（每宮對應的年份與歲數）
+    private func decadalYearAnnotations(for palaceIndex: Int) -> [(year: Int, age: Int)] {
+        guard let decadalIndex = selectedDecadalPalaceIndex,
+              let palace = chart.palaces.first(where: { $0.index == decadalIndex }),
+              let decadal = palace.decadal,
+              let birthYear = Int(chart.solarDate.prefix(4)) else { return [] }
+
+        // 大限的十二宮順序與本命相同，只是起點不同
+        // palaceIndex 在此大限中的位置
+        let offset = (palaceIndex - decadalIndex + 12) % 12
+        // 大限開始年份
+        let startYear = birthYear + decadal.range.0
+        // 此宮對應的歲數 = 大限開始歲數 + offset
+        let age = decadal.range.0 + offset
+        let year = startYear + offset
+
+        guard age <= decadal.range.1 else { return [] }
+        return [(year: year, age: age)]
+    }
+
     private func palaceCell(at index: Int) -> some View {
         let flies = showFlyingStars
             ? ZiweiAnalysis.flyingStars(fromPalaceIndex: index, palaces: chart.palaces)
             : []
         let isSelectedDecadal = selectedDecadalPalaceIndex == index
-        let yearlyLabel = yearlyPalaceLabels[index]
+
+        // 根據 active layer 選擇要顯示的運限標籤
+        let activeLabel: String? = {
+            switch activeHoroscopeLayer {
+            case .natal: return nil
+            case .decadal: return decadalPalaceLabels[index]
+            case .yearly: return yearlyPalaceLabels[index]
+            case .monthly: return monthlyPalaceLabels[index]
+            case .daily: return dailyPalaceLabels[index]
+            case .hourly: return hourlyPalaceLabels[index]
+            }
+        }()
+
+        // 大限年份標註
+        let dAnnotations = decadalYearAnnotations(for: index)
+
         return PalaceCell(
             palace: chart.palaces[index],
             isMingGong: chart.mingGongIndex == index,
@@ -77,9 +165,15 @@ struct ZiweiChartGridView: View {
             flyingStars: flies,
             horoscope: nil,
             isSelectedDecadal: isSelectedDecadal,
-            yearlyLabel: yearlyLabel,
+            yearlyLabel: yearlyPalaceLabels[index],
             yearlyAges: yearlyAges(for: index),
-            selectedYear: selectedYear
+            selectedYear: selectedYear,
+            decadalLabel: decadalPalaceLabels[index],
+            monthlyLabel: monthlyPalaceLabels[index],
+            dailyLabel: dailyPalaceLabels[index],
+            hourlyLabel: hourlyPalaceLabels[index],
+            activeHoroscopeLabel: activeLabel,
+            decadalAnnotations: dAnnotations
         )
         .onTapGesture {
             withAnimation(.spring(response: 0.25, dampingFraction: 0.7)) {
@@ -113,7 +207,15 @@ struct ZiweiChartGridView: View {
                     }
 
                     // 中央資訊卡（合併2x2）
-                    PalaceCellCenter(chart: chart, client: client, selectedYear: selectedYear)
+                    PalaceCellCenter(
+                        chart: chart,
+                        client: client,
+                        selectedDecadalPalaceIndex: selectedDecadalPalaceIndex,
+                        selectedYear: selectedYear,
+                        selectedMonth: selectedMonth,
+                        selectedDay: selectedDay,
+                        selectedHour: selectedHour
+                    )
 
                     // 右側兩宮（上下堆疊）
                     VStack(spacing: 2) {
@@ -155,7 +257,11 @@ struct FourPillarsItem: View {
 struct PalaceCellCenter: View {
     let chart: ZiweiChart
     let client: Client
+    let selectedDecadalPalaceIndex: Int?
     let selectedYear: Int?
+    let selectedMonth: Int
+    let selectedDay: Int
+    let selectedHour: Int
 
     private let heavenlyStems = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
     private let earthlyBranches = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"]
@@ -188,15 +294,52 @@ struct PalaceCellCenter: View {
         chart.fourPillars.year.earthlyBranch.zodiac
     }
 
+    private var birthYear: Int {
+        Int(chart.solarDate.prefix(4)) ?? 2000
+    }
+
+    private var selectedDecadalInfo: String? {
+        guard let decadalIndex = selectedDecadalPalaceIndex,
+              let palace = chart.palaces.first(where: { $0.index == decadalIndex }),
+              let decadal = palace.decadal else { return nil }
+        return "大限：\(decadal.displayName) \(decadal.range.0)~\(decadal.range.1)\(L("age_unit"))"
+    }
+
     private var selectedYearlyInfo: String? {
-        guard let year = selectedYear,
-              let birthYear = Int(chart.solarDate.prefix(4)) else { return nil }
+        guard let year = selectedYear else { return nil }
         let stemIdx = (year - 4) % 10
         let branchIdx = (year - 4) % 12
         let stem = heavenlyStems[stemIdx >= 0 ? stemIdx : stemIdx + 10]
         let branch = earthlyBranches[branchIdx >= 0 ? branchIdx : branchIdx + 12]
         let age = year - birthYear + 1
-        return "\(year)/\(stem)\(branch)\(L("year_unit"))/\(L("nominal_age"))\(age)\(L("age_unit"))"
+        return "流年：\(year)年 \(stem)\(branch) \(age)\(L("age_unit"))"
+    }
+
+    private var selectedMonthlyInfo: String? {
+        guard selectedMonth > 0 else { return nil }
+        let baseYear = selectedYear ?? birthYear
+        let monthStemIdx = (baseYear - 4 + selectedMonth - 1) % 10
+        let monthBranchIdx = (selectedMonth + 1) % 12
+        let stem = heavenlyStems[monthStemIdx >= 0 ? monthStemIdx : monthStemIdx + 10]
+        let branch = earthlyBranches[monthBranchIdx >= 0 ? monthBranchIdx : monthBranchIdx + 12]
+        return "流月：\(selectedMonth)月 \(stem)\(branch)"
+    }
+
+    private var selectedDailyInfo: String? {
+        guard selectedDay > 0 else { return nil }
+        let baseYear = selectedYear ?? birthYear
+        let baseMonth = selectedMonth > 0 ? selectedMonth : 1
+        let dayStemIdx = (baseYear - 4 + baseMonth - 1 + selectedDay - 1) % 10
+        let dayBranchIdx = (selectedDay - 1) % 12
+        let stem = heavenlyStems[dayStemIdx >= 0 ? dayStemIdx : dayStemIdx + 10]
+        let branch = earthlyBranches[dayBranchIdx >= 0 ? dayBranchIdx : dayBranchIdx + 12]
+        return "流日：\(selectedDay)日 \(stem)\(branch)"
+    }
+
+    private var selectedHourlyInfo: String? {
+        guard selectedHour >= 0 else { return nil }
+        guard let branch = EarthlyBranch(rawValue: selectedHour) else { return nil }
+        return "流時：\(branch.displayName)"
     }
 
     var body: some View {
@@ -222,11 +365,33 @@ struct PalaceCellCenter: View {
                     .foregroundColor(.secondary)
             }
 
-            // 選中流年資訊
-            if let info = selectedYearlyInfo {
-                Text("[\(L("tab_yearly"))：\(info)]")
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundColor(.blue)
+            // 運限動態資訊
+            Group {
+                if let info = selectedDecadalInfo {
+                    Text(info)
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(Color(hex: "#E53935"))
+                }
+                if let info = selectedYearlyInfo {
+                    Text(info)
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(Color(hex: "#43A047"))
+                }
+                if let info = selectedMonthlyInfo {
+                    Text(info)
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(Color(hex: "#FB8C00"))
+                }
+                if let info = selectedDailyInfo {
+                    Text(info)
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(Color(hex: "#1E88E5"))
+                }
+                if let info = selectedHourlyInfo {
+                    Text(info)
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(Color(hex: "#8E24AA"))
+                }
             }
 
             Divider()
@@ -301,6 +466,12 @@ struct PalaceCell: View {
     let yearlyLabel: String?
     let yearlyAges: [Int]
     let selectedYear: Int?
+    let decadalLabel: String?
+    let monthlyLabel: String?
+    let dailyLabel: String?
+    let hourlyLabel: String?
+    let activeHoroscopeLabel: String?
+    let decadalAnnotations: [(year: Int, age: Int)]
 
     private var palaceColor: Color {
         if isMingGong { return Color(hex: "#1A73E8") }
@@ -369,6 +540,7 @@ struct PalaceCell: View {
                     if palace.isEmpty { badge(L("badge_empty")) }
                     if isSelectedDecadal { badge("限") }
                     if let yl = yearlyLabel, !yl.isEmpty { yearlyBadge(yl) }
+                    if let al = activeHoroscopeLabel, !al.isEmpty { horoscopeBadge(al) }
                 }
             }
             .padding(.horizontal, 5)
@@ -485,6 +657,17 @@ struct PalaceCell: View {
 
                 Spacer(minLength: 0)
 
+                // 大限年份標註
+                if !decadalAnnotations.isEmpty {
+                    HStack(spacing: 4) {
+                        ForEach(decadalAnnotations.prefix(2), id: \.year) { ann in
+                            Text("\(ann.year)年\(ann.age)歲")
+                                .font(.system(size: 8, weight: .medium))
+                                .foregroundColor(Color(hex: "#E65100"))
+                        }
+                    }
+                }
+
                 // 小限與流年歲數
                 if !palace.ages.isEmpty || !yearlyAges.isEmpty {
                     VStack(alignment: .leading, spacing: 0) {
@@ -593,6 +776,23 @@ struct PalaceCell: View {
             .cornerRadius(2)
     }
 
+    private func horoscopeBadge(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: 8, weight: .bold))
+            .foregroundColor(.white)
+            .padding(.horizontal, 3)
+            .padding(.vertical, 1)
+            .background(
+                text.hasPrefix("大") ? Color(hex: "#E53935").opacity(0.9) :
+                text.hasPrefix("年") ? Color(hex: "#43A047").opacity(0.9) :
+                text.hasPrefix("月") ? Color(hex: "#FB8C00").opacity(0.9) :
+                text.hasPrefix("日") ? Color(hex: "#1E88E5").opacity(0.9) :
+                text.hasPrefix("時") ? Color(hex: "#8E24AA").opacity(0.9) :
+                Color.gray.opacity(0.9)
+            )
+            .cornerRadius(2)
+    }
+
     private func transformationColor(_ trans: String) -> Color {
         switch trans {
         case "禄": return Color(hex: "#4CAF50")
@@ -624,7 +824,6 @@ struct StarsLineCell: View {
 struct ChartDisplayView: View {
     let chart: ZiweiChart
     let client: Client
-    @State private var selectedTab: ChartTab = .main
     @State private var showFlyingStars: Bool = false
 
     // Horoscope selection states (shared across main chart and selectors)
@@ -634,20 +833,6 @@ struct ChartDisplayView: View {
     @State private var selectedMonth: Int = -1
     @State private var selectedDay: Int = -1
     @State private var selectedHour: Int = -1
-
-    enum ChartTab: String, CaseIterable {
-        case main = "本命"
-        case decadal = "大限"
-        case yearly = "流年"
-
-        var localizedName: String {
-            switch self {
-            case .main: return L("tab_natal")
-            case .decadal: return L("tab_decadal")
-            case .yearly: return L("tab_yearly")
-            }
-        }
-    }
 
     /// Currently selected decadal palace index (nil if none)
     private var selectedDecadalPalaceIndex: Int? {
@@ -660,6 +845,9 @@ struct ChartDisplayView: View {
         guard selectedYear > 0 else { return nil }
         return selectedYear
     }
+
+    /// Active horoscope layer for display toggle (本/限/年/月/日/時)
+    @State private var activeHoroscopeLayer: HoroscopeLayer = .natal
 
     var body: some View {
         VStack(spacing: 0) {
@@ -679,14 +867,6 @@ struct ChartDisplayView: View {
                         .foregroundColor(showFlyingStars ? .blue : .secondary)
                 }
                 .help(L("help_flying_stars"))
-
-                Picker("", selection: $selectedTab) {
-                    ForEach(ChartTab.allCases, id: \.self) { tab in
-                        Text(tab.localizedName).tag(tab)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .frame(width: 240)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -694,256 +874,53 @@ struct ChartDisplayView: View {
 
             Divider()
 
-            switch selectedTab {
-            case .main:
-                VStack(spacing: 0) {
-                    ZiweiChartGridView(
-                        chart: chart,
-                        client: client,
-                        showFlyingStars: showFlyingStars,
-                        selectedDecadalPalaceIndex: selectedDecadalPalaceIndex,
-                        selectedYear: selectedYearValue
-                    )
-                    HoroscopeSelectorView(
-                        chart: chart,
-                        selectedDecadal: $selectedDecadal,
-                        selectedYear: $selectedYear,
-                        selectedMonth: $selectedMonth,
-                        selectedDay: $selectedDay,
-                        selectedHour: $selectedHour
-                    )
-                }
-            case .decadal:
-                DecadalView(chart: chart)
-            case .yearly:
-                YearlyView(chart: chart)
-            }
-        }
-    }
-}
+            VStack(spacing: 0) {
+                ZiweiChartGridView(
+                    chart: chart,
+                    client: client,
+                    showFlyingStars: showFlyingStars,
+                    selectedDecadalPalaceIndex: selectedDecadalPalaceIndex,
+                    selectedYear: selectedYearValue,
+                    selectedMonth: selectedMonth,
+                    selectedDay: selectedDay,
+                    selectedHour: selectedHour,
+                    activeHoroscopeLayer: activeHoroscopeLayer
+                )
 
-struct DecadalView: View {
-    let chart: ZiweiChart
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
-                ForEach(0..<12, id: \.self) { index in
-                    let palace = chart.palaces[index]
-                    decadalRow(palace: palace, index: index)
-                }
-            }
-            .padding()
-        }
-    }
-
-    private func decadalRow(palace: ZiweiPalace, index: Int) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text("第\(index + 1)\(L("decadal_label")) · \(palace.displayName)")
-                    .font(.system(size: 14, weight: .semibold))
-
-                Spacer()
-
-                if let decadal = palace.decadal {
-                    Text("\(decadal.range.0)~\(decadal.range.1)\(L("age_unit"))")
-                        .font(.system(size: 12))
-                        .foregroundColor(.secondary)
-                    Text(decadal.displayName)
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.primary)
-                }
-            }
-
-            // 大限主星
-            if !palace.majorStars.isEmpty {
-                HStack(spacing: 6) {
-                    ForEach(palace.majorStars, id: \.name) { star in
-                        HStack(spacing: 2) {
-                            Text(star.displayName)
-                                .font(.system(size: 12, weight: .medium))
-                            if let trans = star.transformation, !trans.isEmpty {
-                                Text(localizedMutagen(trans))
-                                    .font(.system(size: 9, weight: .bold))
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 3)
-                                    .padding(.vertical, 1)
-                                    .background(transColor(trans))
-                                    .cornerRadius(2)
+                // 運限層級切換器（本/限/年/月/日/時）
+                HStack(spacing: 0) {
+                    ForEach(HoroscopeLayer.allCases, id: \.self) { layer in
+                        Button {
+                            withAnimation(.spring(response: 0.2, dampingFraction: 0.8)) {
+                                activeHoroscopeLayer = layer
                             }
+                        } label: {
+                            Text(layer.displayName)
+                                .font(.system(size: 12, weight: activeHoroscopeLayer == layer ? .semibold : .regular))
+                                .foregroundColor(activeHoroscopeLayer == layer ? .white : .primary)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 6)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .fill(activeHoroscopeLayer == layer ? Color.blue : Color.clear)
+                                )
                         }
+                        .buttonStyle(.plain)
                     }
                 }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(Color(.textBackgroundColor))
+
+                HoroscopeSelectorView(
+                    chart: chart,
+                    selectedDecadal: $selectedDecadal,
+                    selectedYear: $selectedYear,
+                    selectedMonth: $selectedMonth,
+                    selectedDay: $selectedDay,
+                    selectedHour: $selectedHour
+                )
             }
-
-            // 大限輔星
-            if !palace.minorStars.isEmpty {
-                Text(palace.minorStars.map { $0.displayName }.joined(separator: " "))
-                    .font(.system(size: 11))
-                    .foregroundColor(.secondary)
-            }
-        }
-        .padding()
-        .background(Color(.textBackgroundColor))
-        .cornerRadius(8)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray.opacity(0.12), lineWidth: 0.5)
-        )
-    }
-
-    private func transColor(_ trans: String) -> Color {
-        switch trans {
-        case "禄": return Color(hex: "#4CAF50")
-        case "权": return Color(hex: "#9C27B0")
-        case "科": return Color(hex: "#2196F3")
-        case "忌": return Color(hex: "#F44336")
-        default: return .gray
-        }
-    }
-}
-
-struct YearlyView: View {
-    let chart: ZiweiChart
-    @State private var selectedYearOffset: Int = 0
-
-    private var birthYear: Int {
-        let components = chart.solarDate.split(separator: "-").compactMap { Int($0) }
-        return components.first ?? 2000
-    }
-
-    private var currentYearly: PeriodData? {
-        chart.horoscope.yearly
-    }
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
-                // 年份選擇器
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(-5..<6, id: \.self) { offset in
-                            let year = birthYear + offset
-                            Button {
-                                withAnimation(.spring(response: 0.2, dampingFraction: 0.8)) {
-                                    selectedYearOffset = offset
-                                }
-                            } label: {
-                                Text("\(year)\(L("year_unit"))")
-                                    .font(.system(size: 12, weight: selectedYearOffset == offset ? .semibold : .regular))
-                                    .foregroundColor(selectedYearOffset == offset ? .white : .primary)
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 4)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 4)
-                                            .fill(selectedYearOffset == offset ? Color.blue : Color(.textBackgroundColor))
-                                    )
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .padding(.horizontal)
-                }
-
-                if let yearly = currentYearly {
-                    // 流年干支
-                    HStack {
-                        Text("\(L("current_yearly"))：\(yearly.heavenlyStem.displayName)\(yearly.earthlyBranch.displayName)")
-                            .font(.system(size: 14, weight: .semibold))
-                        Spacer()
-                    }
-                    .padding()
-                    .background(Color(.textBackgroundColor))
-                    .cornerRadius(8)
-
-                    // 流年四化
-                    if !yearly.mutagen.isEmpty {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(L("yearly_mutagen"))
-                                .font(.system(size: 13, weight: .semibold))
-                            HStack(spacing: 8) {
-                                ForEach(yearly.mutagen.indices, id: \.self) { i in
-                                    let transKeys = ["mutagen_lu", "mutagen_quan", "mutagen_ke", "mutagen_ji"]
-                                    let transRaw = ["禄", "权", "科", "忌"][i]
-                                    let star = yearly.mutagen[i].displayName
-                                    HStack(spacing: 2) {
-                                        Text(L(transKeys[i]))
-                                            .font(.system(size: 10, weight: .bold))
-                                            .foregroundColor(.white)
-                                            .padding(.horizontal, 4)
-                                            .padding(.vertical, 2)
-                                            .background(transColor(transRaw))
-                                            .cornerRadius(2)
-                                        Text(star)
-                                            .font(.system(size: 12))
-                                    }
-                                }
-                            }
-                        }
-                        .padding()
-                        .background(Color(.textBackgroundColor))
-                        .cornerRadius(8)
-                    }
-
-                    // 流耀
-                    if !yearly.stars.isEmpty {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(L("yearly_flow_stars"))
-                                .font(.system(size: 13, weight: .semibold))
-                            Text(yearly.stars.map { $0.displayName }.joined(separator: " "))
-                                .font(.system(size: 12))
-                                .foregroundColor(.secondary)
-                        }
-                        .padding()
-                        .background(Color(.textBackgroundColor))
-                        .cornerRadius(8)
-                    }
-
-                    // 歲前十二神
-                    if !yearly.suiqian12.isEmpty {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(L("suiqian_12_title"))
-                                .font(.system(size: 13, weight: .semibold))
-                            Text(yearly.suiqian12.map { localizedSuiqianName($0) }.joined(separator: " "))
-                                .font(.system(size: 11))
-                                .foregroundColor(.secondary)
-                        }
-                        .padding()
-                        .background(Color(.textBackgroundColor))
-                        .cornerRadius(8)
-                    }
-
-                    // 將前十二神
-                    if !yearly.jiangqian12.isEmpty {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(L("jiangqian_12_title"))
-                                .font(.system(size: 13, weight: .semibold))
-                            Text(yearly.jiangqian12.map { localizedJiangqianName($0) }.joined(separator: " "))
-                                .font(.system(size: 11))
-                                .foregroundColor(.secondary)
-                        }
-                        .padding()
-                        .background(Color(.textBackgroundColor))
-                        .cornerRadius(8)
-                    }
-                } else {
-                    Text(L("no_yearly_data"))
-                        .foregroundColor(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding()
-                }
-            }
-            .padding()
-        }
-    }
-
-    private func transColor(_ trans: String) -> Color {
-        switch trans {
-        case "禄": return Color(hex: "#4CAF50")
-        case "权": return Color(hex: "#9C27B0")
-        case "科": return Color(hex: "#2196F3")
-        case "忌": return Color(hex: "#F44336")
-        default: return .gray
         }
     }
 }
